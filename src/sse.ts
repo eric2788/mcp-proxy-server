@@ -16,15 +16,6 @@ app.get("/sse", async (req, res) => {
   server.onerror = (err) => {
     console.error(`Server onerror: ${err.stack}`)
   }
-
-  server.onclose = async () => {
-    console.log('Server onclose')
-    if (process.env.KEEP_SERVER_OPEN !== "1") {
-      await cleanup();
-      await server.close();
-      process.exit(0);
-    }
-  };
 });
 
 app.post("/message", async (req, res) => {
