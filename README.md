@@ -30,9 +30,15 @@ An MCP proxy server that aggregates and serves multiple MCP resource servers thr
 
 You can run both the SSE server and web UI using Docker:
 
-1. Build and start the containers:
+Build and start the containers:
 ```bash
 docker-compose up -d
+```
+
+Or You can pull the pre-built image from GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/eric2788/mcp-proxy-server:latest
 ```
 
 ### Configurable via Web UI (forked)
