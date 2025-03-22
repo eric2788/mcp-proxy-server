@@ -36,3 +36,18 @@ const PORT = process.env.PORT || 3006;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// add signterm and sigint handlers
+process.on("SIGTERM", async () => {
+  console.log("Received SIGTERM");
+  await cleanup();
+  await server.close();
+  process.exit(0);
+});
+
+process.on("SIGINT", async () => {
+  console.log("Received SIGINT");
+  await cleanup();
+  await server.close();
+  process.exit(0);
+});
