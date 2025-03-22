@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "NodeNext",
+        "target": "ESNext",
+        "moduleResolution": "nodenext",
+        "noEmit": false,
+        "esModuleInterop": true,
+        "outDir": "./build",
+        "rootDir": "./src",
+        "composite": true,
+        "declaration": true,
+        "declarationDir": "./build/types"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+}

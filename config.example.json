@@ -1,27 +1,21 @@
 {
   "servers": [
     {
-      "name": "Example Server 1",
+      "name": "fetch",
       "transport": {
-        "command": "/path/to/server1/build/index.js"
-      }
-    },
-    {
-      "name": "Example Server 2",
-      "transport": {
-        "command": "npx",
+        "command": "uvx",
         "args": [
-          "@example/mcp-server",
-          "--option",
-          "value"
+          "mcp-server-fetch"
         ]
       }
     },
     {
-      "name": "Example Server 3",
+      "name": "mcp-server-git",
       "transport": {
-        "type": "sse",
-        "url": "http://example.com/mcp"
+        "command": "uvx",
+        "args": [
+          "mcp-server-git"
+        ]
       }
     }
   ]

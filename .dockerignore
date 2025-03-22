@@ -1,0 +1,6 @@
+config.json
+**/.next/
+**/node_modules/
+**/build/
+package-lock.json
+**/.github/
