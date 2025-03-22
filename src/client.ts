@@ -3,6 +3,7 @@ import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { ServerConfig } from './config.js';
+import os from 'node:os';
 
 const sleep = (time: number) => new Promise<void>(resolve => setTimeout(() => resolve(), time))
 export interface ConnectedClient {
@@ -18,12 +19,16 @@ const createClient = (server: ServerConfig): { client: Client | undefined, trans
     if (server.transport.type === 'sse') {
       transport = new SSEClientTransport(new URL(server.transport.url));
     } else {
+      if (os.platform() ==='win32' && server.transport.command === 'npx') {
+        server.transport.command = 'cmd'
+        server.transport.args = ['/c', 'npx', ...server.transport.args || []]
+      }
       transport = new StdioClientTransport({
         command: server.transport.command,
         args: server.transport.args,
-        env: server.transport.env ? server.transport.env.reduce((o, v) => ({
+        env: Array.isArray(server.transport.env) ? server.transport.env.reduce((o, v) => ({
           [v]: process.env[v] || ''
-        }), {}) : undefined
+        }), {}) : (server.transport.env || {})
       });
     }
   } catch (error) {
