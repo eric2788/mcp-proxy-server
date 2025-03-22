@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  mcp-proxy:
+    build: .
+    ports:
+      - "3000:3000"  # Next.js app
+      - "3006:3006"  # SSE server
+    volumes:
+      - ./config:/app/config
+    environment:
+      - NODE_ENV=production
+      - MCP_CONFIG_PATH=/app/config/config.json
+      - KEEP_SERVER_OPEN=1
+      - PORT=3006
+      - WEB_URL=http://localhost:3000
