@@ -25,6 +25,24 @@ An MCP proxy server that aggregates and serves multiple MCP resource servers thr
 - Route prompt requests to appropriate backends
 - Handle multi-server prompt responses
 
+
+### Docker Support (forked)
+
+You can run both the SSE server and web UI using Docker:
+
+1. Build and start the containers:
+```bash
+docker-compose up -d
+```
+
+### Configurable via Web UI (forked)
+
+You can configure the server via a web UI. The web UI is available at `http://localhost:3000` by default. You can change the port in the `docker-compose.yml` file.
+
+- Access the web UI at `http://localhost:3000` (or the port you specified in the `docker-compose.yml` file).
+- Use the web UI to add, remove, or modify MCP servers and their configurations.
+- The web UI will automatically refresh the synced state of the mcp proxy.
+
 ## Configuration
 
 The server requires a JSON configuration file that specifies the MCP servers to connect to. Copy the example config and modify it for your needs:
@@ -124,3 +142,4 @@ npm run inspector
 ```
 
 The Inspector will provide a URL to access debugging tools in your browser.
+
