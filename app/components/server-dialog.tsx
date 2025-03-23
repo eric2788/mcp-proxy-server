@@ -103,12 +103,12 @@ export function ServerDialog({ isOpen, onClose, onSave, server, isLoading }: Ser
             : {
                 command,
                 args: args ? args.split(" ") : undefined,
-                env: envVars.reduce((acc, { key, value }) => {
+                env: envVars.length > 0 ? envVars.reduce((acc, { key, value }) => {
                     if (key && value) {
                         return { ...acc, [key]: value }
                     }
                     return acc
-                }, {})
+                }, {}) : undefined
             }
 
         onSave({
