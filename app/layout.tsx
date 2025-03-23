@@ -1,5 +1,6 @@
 import { Provider } from '@/components/provider'
 import { Toaster } from "./components/toaster"
+import { AuthProvider } from "./components/auth-provider"
 
 export default function RootLayout({
   children,
@@ -10,7 +11,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Provider>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
           <Toaster />
         </Provider>
       </body>

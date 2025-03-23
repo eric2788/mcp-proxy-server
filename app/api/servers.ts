@@ -1,40 +1,39 @@
 import { ServerConfig } from "@servers/config"
-import { API_URL } from "./base"
-
+import { API_URL, fetchWithAuth } from "./base"
 
 export async function listServers(): Promise<ServerConfig[]> {
-    const response = await fetch(`${API_URL}/servers`)
+    const response = await fetchWithAuth(`${API_URL}/servers`)
+    
+    const data = await response.json()
     if (!response.ok) {
-        throw new Error("Failed to fetch servers")
+        throw new Error(data.error || "Failed to fetch servers")
     }
-    return await response.json()
+    return data
 }
 
-
 export async function saveServer(server: ServerConfig): Promise<ServerConfig[]> {
-    const response = await fetch(`${API_URL}/servers`, {
+    const response = await fetchWithAuth(`${API_URL}/servers`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
         body: JSON.stringify(server),
     })
 
+    const data = await response.json()
     if (!response.ok) {
-        throw new Error("Failed to save server")
+        throw new Error(data.error || "Failed to save server")
     }
 
-    return await response.json()
+    return data
 }
 
 export async function deleteServer(server: ServerConfig): Promise<ServerConfig[]> {
-    const response = await fetch(`${API_URL}/servers/${server.name}`, {
+    const response = await fetchWithAuth(`${API_URL}/servers/${server.name}`, {
         method: "DELETE",
     })
 
+    const data = await response.json()
     if (!response.ok) {
-        throw new Error("Failed to delete server")
+        throw new Error(data.error || "Failed to delete server")
     }
 
-    return await response.json()
+    return data
 }

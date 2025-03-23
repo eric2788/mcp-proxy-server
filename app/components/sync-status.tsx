@@ -1,6 +1,6 @@
 "use client"
 
-import { healthCheck, HealthStatus } from "@/api/health"
+import { healthCheck, HealthStatus } from "@/api/common"
 import { Badge, Button, HStack, Spinner } from "@chakra-ui/react"
 import { Tooltip } from "@components/tooltip"
 import { useEffect, useState } from "react"

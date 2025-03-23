@@ -28,7 +28,7 @@ import { ColorModeButton } from "./components/color-mode"
 import { deleteServer, listServers, saveServer } from "./api/servers"
 import { SyncStatus } from "./components/sync-status"
 
-export default function ServersPage() {
+export default function Page() {
     const [servers, setServers] = useState<ServerConfig[]>([])
     const [editingServer, setEditingServer] = useState<ServerConfig | null>(null)
     const [isLoading, setIsLoading] = useState(false)

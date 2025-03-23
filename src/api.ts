@@ -1,6 +1,9 @@
 import cors from 'cors';
 import { json, Router } from "express";
 import { Config, loadConfig, saveConfig, ServerConfig } from "./config.js";
+import jwt from 'jsonwebtoken';
+
+const { servers } = await loadConfig()
 
 const corsOptions: cors.CorsOptions = {
   origin: process.env.NODE_ENV === 'production' ? (process.env.WEB_URL || '*') : 'http://localhost:3000',
@@ -8,11 +11,51 @@ const corsOptions: cors.CorsOptions = {
 }
 
 const router = Router()
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASSWORD;
+
+if (!ADMIN_PASS) {
+  console.warn('Warning: ADMIN_PASSWORD not set, using default password "admin"');
+}
 
 router.use(cors(corsOptions))
 router.use(json())
 
-const { servers } = await loadConfig()
+// Auth middleware
+const authMiddleware = (req: any, res: any, next: any) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+};
+
+// Login endpoint
+router.post("/auth", async (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === ADMIN_USER && password === (ADMIN_PASS || 'admin')) {
+    const token = jwt.sign({ username }, JWT_SECRET, {
+      expiresIn: '24h'
+    });
+    
+    res.json({ token });
+  } else {
+    res.status(401).json({ error: 'Invalid credentials' });
+  }
+});
+
+// Protect all other routes
+router.use(authMiddleware);
 
 // Get all servers
 router.get("/servers", async (_req, res) => {
