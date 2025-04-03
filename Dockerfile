@@ -43,7 +43,7 @@ COPY config.example.json config.json
 ENV NODE_ENV=production
 ENV KEEP_SERVER_OPEN=1
 ENV WEB_URL=http://localhost:3000
-ENV API_URL=http://localhost:3006
+ENV NEXT_PUBLIC_API_URL=http://localhost:3006
 
 # Create start script
 RUN echo -e '#!/bin/sh\n\

@@ -1,4 +1,6 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006/api"
+import { env } from "next-runtime-env"
+
+export const API_URL = env('NEXT_PUBLIC_API_URL') || "http://localhost:3006/api"
 
 export async function fetchWithAuth(url: string, options: RequestInit = {}) {
     const token = localStorage.getItem('auth_token')
