@@ -42,18 +42,17 @@ COPY config.example.json config.json
 # Set environment variables
 ENV NODE_ENV=production
 ENV KEEP_SERVER_OPEN=1
-ENV WEB_URL=http://localhost:3000
-ENV NEXT_PUBLIC_API_URL=http://localhost:3006
 
-# Create start script
+# Create separate start scripts for each service
 RUN echo -e '#!/bin/sh\n\
-echo "npx version: $(npx --version)" \n\
-echo "uv version: $(uv --version)" \n\
-echo "uvx version: $(uvx --version)" \n\
-echo "Starting SSE server and Next.js app..." \n\
-npm run start:sse & \n\
-npm run start:app' > /app/start.sh && \
-chmod +x /app/start.sh
+echo "Starting Next.js app..." \n\
+npm run start:app' > /app/start-app.sh && \
+chmod +x /app/start-app.sh
 
-# Set the start command
-CMD ["/app/start.sh"]
+RUN echo -e '#!/bin/sh\n\
+echo "Starting SSE server..." \n\
+npm run start:sse' > /app/start-sse.sh && \
+chmod +x /app/start-sse.sh
+
+# Default command starts both (for backward compatibility)
+CMD ["/bin/sh", "-c", "/app/start-sse.sh & /app/start-app.sh"]
