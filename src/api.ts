@@ -1,5 +1,6 @@
 import cors from 'cors';
 import { json, Router } from "express";
+import morgan from 'morgan';
 import { Config, loadConfig, saveConfig, ServerConfig } from "./config.js";
 import jwt from 'jsonwebtoken';
 
@@ -21,6 +22,8 @@ if (!ADMIN_PASS) {
 
 router.use(cors(corsOptions))
 router.use(json())
+router.use(morgan('common'))
+
 
 // Auth middleware
 const authMiddleware = (req: any, res: any, next: any) => {
@@ -48,7 +51,7 @@ router.post("/auth", async (req, res) => {
       expiresIn: '24h'
     });
     
-    res.json({ token });
+    res.status(200).json({ token });
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
   }
@@ -61,7 +64,7 @@ router.use(authMiddleware);
 router.get("/servers", async (_req, res) => {
   try {
     const config: Config = await loadConfig()
-    res.json(config.servers)
+    res.status(200).json(config.servers)
   } catch (error) {
     console.error("Error reading servers:", error)
     res.status(500).json({ error: "Failed to read server configuration" })
@@ -82,7 +85,7 @@ router.post("/servers", async (req, res) => {
     }
 
     await saveConfig(config)
-    res.json(config.servers)
+    res.status(200).json(config.servers)
   } catch (error) {
     console.error("Error saving server:", error)
     res.status(500).json({ error: "Failed to save server configuration" })
@@ -95,7 +98,7 @@ router.delete("/servers/:name", async (req, res) => {
     const config: Config = await loadConfig()
     config.servers = config.servers.filter(s => s.name !== req.params.name)
     await saveConfig(config)
-    res.json(config.servers)
+    res.status(200).json(config.servers)
   } catch (error) {
     console.error("Error deleting server:", error)
     res.status(500).json({ error: "Failed to delete server" })
@@ -109,10 +112,10 @@ router.get("/health", async (_req, res) => {
     if (!match) {
       console.info("changes detected. please restart the server")
     }
-    res.json({ status: match ? "sync" : "unsync" })
+    res.status(200).json({ status: match ? "sync" : "unsync" })
   } catch (error: Error | any) {
     console.error("Error checking health:", error)
-    res.json({ status: "error", error: error?.message || error })
+    res.status(200).json({ status: "error", error: error?.message || error })
   }
 })
 
