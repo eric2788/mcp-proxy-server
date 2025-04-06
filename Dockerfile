@@ -1,9 +1,9 @@
-# Use Node.js LTS
-FROM node:20-alpine
+# Use Docker-in-Docker
+FROM docker:dind
 
-# Install curl
+# Install Node.js and required dependencies
 RUN apk update && \
-    apk add gcc make curl git python3 py3-pip && \
+    apk add --no-cache nodejs npm gcc make curl git python3 py3-pip && \
     rm -rf /var/cache/apk/*
 
 # Install uv
