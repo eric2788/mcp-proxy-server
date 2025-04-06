@@ -43,16 +43,5 @@ COPY config.example.json config.json
 ENV NODE_ENV=production
 ENV KEEP_SERVER_OPEN=1
 
-# Create separate start scripts for each service
-RUN echo -e '#!/bin/sh\n\
-echo "Starting Next.js app..." \n\
-npm run start:app' > /app/start-app.sh && \
-chmod +x /app/start-app.sh
-
-RUN echo -e '#!/bin/sh\n\
-echo "Starting SSE server..." \n\
-npm run start:sse' > /app/start-sse.sh && \
-chmod +x /app/start-sse.sh
-
 # Default command starts both (for backward compatibility)
-CMD ["/bin/sh", "-c", "/app/start-sse.sh & /app/start-app.sh"]
+CMD ["/bin/sh", "-c", "npm run start:app & npm run start:sse"]
