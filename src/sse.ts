@@ -19,6 +19,12 @@ app.get("/sse", async (req, res) => {
   server.onerror = (err) => {
     console.error(`server onerror: ${err.stack}`)
   }
+
+  server.onclose = () => {
+    console.log("server closed");
+    connections.delete(req.ip || '');
+  }
+  
 });
 
 app.post("/message", async (req, res) => {
