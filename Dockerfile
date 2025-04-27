@@ -1,5 +1,5 @@
-# Use Docker-in-Docker
-FROM docker:dind
+# Use Docker-Cli
+FROM docker:cli
 
 # Install Node.js and required dependencies
 RUN apk update && \
